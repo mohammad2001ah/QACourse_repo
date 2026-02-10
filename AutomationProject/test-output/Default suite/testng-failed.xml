@@ -5,8 +5,9 @@
     <classes>
       <class name="StoreAuto.Store">
         <methods>
-          <include name="SignUPTest"/>
           <include name="MySetup"/>
+          <include name="SignUPTest"/>
+          <include name="Login"/>
         </methods>
       </class> <!-- StoreAuto.Store -->
     </classes>

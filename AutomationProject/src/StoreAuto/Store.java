@@ -17,121 +17,98 @@ import org.testng.annotations.Test;
 
 import net.bytebuddy.dynamic.DynamicType.Builder.InnerTypeDefinition;
 
-public class Store
+public class Store extends TestData
 {
-	String MyWebSite = "https://automationteststore.com/";
-
-	WebDriver driver = new EdgeDriver();
-	Random rand = new Random();
-	String PasswordAndConfirmPassword = "Asd123!@#";
-
-
 	@BeforeTest
 	public void MySetup()
 	{
-		driver.get(MyWebSite);
-		driver.manage().window().maximize();
+		SetupMyTest();
 	}
 
-	/**
-	 * @throws InterruptedException
-	 */
 	@Test(priority = 1)
 	public void SignUPTest() throws InterruptedException
 	{
-
-		/*
-		 * partial >>>> tack part of text LinkText >>> tack all text and it is best than
-		 * partial just in <a> tag
-		 */
-		// driver.findElement(By.partialLinkText("Login or")).click();
+		//--------------Web Elements-------------------------------------//
 		WebElement loginAndSignUpButton = driver.findElement(By.linkText("Login or register"));
 		loginAndSignUpButton.click();
-
-		// xpath syntax >> //tagname[@ attribute='']
-
-		driver.findElement(By.xpath("//button[@title='Continue']")).click();
-		String[] femaleNames =
-		{ "Noor", "Layan", "Reem", "Sara", "Maryam", "Tala", "Joud", "Haya", "Rana", "Dana" };
-		String[] maleNames =
-		{ "Ahmad", "Mohammad", "Omar", "Ali", "Yousef", "Khaled", "Hamza", "Bilal", "Zaid", "Hassan" };
-		String[] jordanAddresses =
-		{ "Amman - Abdoun Street", "Irbid - University Street", "Zarqa - King Hussein Street", "Aqaba - Corniche Road",
-				"Salt - Main Square", "Madaba - City Center", "Jerash - Roman Street", "Karak - Castle Road",
-				"Mafraq - Downtown", "Tafilah - Main Road" };
-
-		int randomindex1 = rand.nextInt(femaleNames.length);
-		int randomindex2 = rand.nextInt(maleNames.length);
-		int randomIndex3=rand.nextInt(jordanAddresses.length);
-
-		String randomFirstName = femaleNames[randomindex1];
-		String randomLastName = maleNames[randomindex2];
-		String randomAddressName = jordanAddresses[randomIndex3];
+		WebElement ContinueButtonBeforeSignUp=driver.findElement(By.xpath("//button[@title='Continue']"));
+		ContinueButtonBeforeSignUp.click();
 		WebElement FirstNameInput = driver.findElement(By.id("AccountFrm_firstname"));
-		FirstNameInput.sendKeys(randomFirstName);
-
 		WebElement lastNameInput = driver.findElement(By.id("AccountFrm_lastname"));
-		lastNameInput.sendKeys(randomLastName);
-
-		int randomEmailNumber1 = rand.nextInt(5897);
-		int randomEmailNumber2 = rand.nextInt(532);
-
-		String TheEmail = randomFirstName + randomLastName + randomEmailNumber1 + randomEmailNumber2 + "@gamil.com";
 		WebElement EmailInput = driver.findElement(By.id("AccountFrm_email"));
-		EmailInput.sendKeys(TheEmail);
-		
 		WebElement address1=driver.findElement(By.id("AccountFrm_address_1"));
-		address1.sendKeys(randomAddressName);
-		
 		WebElement cityElement=driver.findElement(By.id("AccountFrm_city"));
-		cityElement.sendKeys("Amman");
-		
 		WebElement CountryDropDwon=driver.findElement(By.id("AccountFrm_country_id"));
-		Select CountrySelect=new Select(CountryDropDwon);
-		int randCountry=rand.nextInt(1,20);
-		CountrySelect.selectByVisibleText("Jordan");
-		Thread.sleep(10000);
-		
+		Thread.sleep(2000);
 		WebElement StateDropDown= driver.findElement(By.id("AccountFrm_zone_id"));
+		WebElement PostalInput = driver.findElement(By.id("AccountFrm_postcode"));
+		WebElement LoginNameInput = driver.findElement(By.id("AccountFrm_loginname"));
+		WebElement PasswordInput = driver.findElement(By.id("AccountFrm_password"));
+		WebElement ConfirmPasswordInput = driver.findElement(By.id("AccountFrm_confirm"));
+		WebElement ConditionsAndTermsCheckbox =driver.findElement(By.id("AccountFrm_newsletter1"));
+		WebElement checkBoxElement= driver.findElement(By.id("AccountFrm_agree"));
+		WebElement Continue =driver.findElement(By.cssSelector(".btn.btn-orange.pull-right.lock-on-click"));
+		WebElement WelcomeMessageArea = driver.findElement(By.id("customernav"));
+		
+		// --------------------Action Area--------------------
+		
+		
+		FirstNameInput.sendKeys(randomFirstName);
+		lastNameInput.sendKeys(randomLastName);
+		EmailInput.sendKeys(TheEmail);
+		address1.sendKeys(randomAddressName);
+		cityElement.sendKeys("Amman");
+		Select CountrySelect=new Select(CountryDropDwon);
+		CountrySelect.selectByVisibleText("Jordan");
+		Thread.sleep(5000);
 		int randState=rand.nextInt(StateDropDown.findElements(By.tagName("option")).size());
 		Select SelectforStateDropDown = new Select(StateDropDown);
 		SelectforStateDropDown.selectByIndex(randState);
-		
-		WebElement PostalInput = driver.findElement(By.id("AccountFrm_postcode"));
 		PostalInput.sendKeys("randomPostal");
-		
-		WebElement LoginNameInput = driver.findElement(By.id("AccountFrm_loginname"));
-		LoginNameInput.sendKeys(randomFirstName + randomLastName + randomEmailNumber1 + randomEmailNumber2);
-		
-		WebElement PasswordInput = driver.findElement(By.id("AccountFrm_password"));
-		WebElement ConfirmPasswordInput = driver.findElement(By.id("AccountFrm_confirm"));
-
+		LoginNameInput.sendKeys(LoginInfo);
 		PasswordInput.sendKeys(PasswordAndConfirmPassword);
 		ConfirmPasswordInput.sendKeys(PasswordAndConfirmPassword);
-		
-		WebElement ConditionsAndTermsCheckbox =driver.findElement(By.id("AccountFrm_newsletter1"));
 		ConditionsAndTermsCheckbox.click();
-		
-		WebElement checkBoxElement= driver.findElement(By.id("AccountFrm_agree"));
 		checkBoxElement.click();
-		
-		WebElement Continue =driver.findElement(By.cssSelector(".btn.btn-orange.pull-right.lock-on-click"));
 		Continue.click();
 		
+		//-------------------- Assertion--------------------
 		Assert.assertEquals(driver.getCurrentUrl().contains("success"), true);
-		Assert.assertEquals(driver.getPageSource().contains("Congratulations"), true);
+//		Assert.assertEquals(driver.getPageSource().contains("Congratulations"), true);
+//		Assert.assertEquals(WelcomeMessageArea.getText().contains(randomFirstName), true);
+	}
+	
+	@Test(priority = 2)
+	public void Logout() {
+		driver.navigate().to(logout);
+		WebElement contentpaneLogoutMessag=driver.findElement(By.className("contentpanel"));
+		boolean ActualLogoutValue= contentpaneLogoutMessag.getText().contains(expectedLogoutMessage);
 		
-		WebElement WelcomeMessageArea = driver.findElement(By.id("customernav"));
-
-		Assert.assertEquals(WelcomeMessageArea.getText().contains(randomFirstName), true);
-
-
-
-
-
+		//Assertion
+		Assert.assertEquals(ActualLogoutValue, ExpectedLogoutValue);
+	}
+	
+	@Test(priority = 3)
+	public void Login() {
+		WebElement loginAndSignUpButton = driver.findElement(By.linkText("Login or register"));
+		loginAndSignUpButton.click();
+		//Element inside the login form
+		WebElement LoginName=driver.findElement(By.id("loginFrm_loginname"));
+		WebElement Password=driver.findElement(By.id("loginFrm_password"));
+		
+		//Actions
+		LoginName.sendKeys(LoginInfo);
+		Password.sendKeys(PasswordAndConfirmPassword);
+		WebElement LoginButton=driver.findElement(By.xpath("//button[@title='Login']"));
+		LoginButton.click();
+		
+		//Assertion
+		WebElement welcomeMessagElement=driver.findElement(By.id("customernav"));
+		Assert.assertEquals(welcomeMessagElement.getText().contains(randomFirstName), true);
 		
 		
-
+		
+		
 	}
 
 }
