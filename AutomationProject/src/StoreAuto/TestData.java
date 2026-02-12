@@ -1,5 +1,6 @@
 package StoreAuto;
 
+import java.time.Duration;
 import java.util.Random;
 
 import org.openqa.selenium.WebDriver;
@@ -43,6 +44,7 @@ public class TestData
 	{
 		driver.get(MyWebSite);
 		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
 	}
 	
 	String logout ="https://automationteststore.com/index.php?rt=account/logout";
